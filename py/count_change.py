@@ -12,16 +12,29 @@
 #   count_change(10, [5,2,3]) # => 4
 #   count_change(11, [5,7]) # => 0
 
+# def count_change(money, coins):
+#     if not coins or not money:
+#         return []
+#     dp = [[] for _ in range(money + 1)]
+#     for coin in coins:
+#         dp[coin] = [[coin]]
+#     for i in range(min(coins), money + 1):
+#         tmp = dp[i]
+#         for coin in coins:
+#             if (i - coin) > 0 and dp[i - coin]:
+#                 tmp += [[coin] + l for l in dp[i - coin]]
+#         dp[i] = tmp
+#     results = dp[money]
+# return len(set([str(sorted(x)) for x in results]))
+
 
 def count_change(money, coins):
-    dp = [[] * (money + 1)]
-    dp[0] = [[]]
-    for i in range(1, money):
-        if dp[i]:
-            for coin in coins:
-                dp[i].append([t + [coin] for t in dp[i - 1]])
-    # results = count_change_helper(money, coins)
-    return len(set([str(sorted(x)) for x in results]))
+    dp = [1] + [0] * (money + 1)
+    for coin in coins:
+        for i in range(coin, money + 1):
+            dp[i] += dp[i - coin]
+    print(dp, money, coins)
+    return dp[money]
 
 
 def count_change_helper(money, coins):
